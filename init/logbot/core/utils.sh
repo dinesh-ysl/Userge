@@ -8,6 +8,7 @@
 #
 # All rights reserved.
 
-Message() {
-    . <(sed "s/_Message/$1/g" init/logbot/core/messageClass.sh)
+urlEncode() {
+    echo "<code>$(echo "${1#\~}" | sed -E 's/(\\t)|(\\n)/ /g' |
+        curl -Gso /dev/null -w %{url_effective} --data-urlencode @- "" | cut -c 3-)</code>"
 }

@@ -17,13 +17,13 @@ log() {
 }
 
 quit() {
-    local err="\t:: ERROR :: $1\nExiting With SIGTERM ..."
+    local err="\t:: ERROR :: $1\nExiting With SIGTERM (143) ..."
     if (( getMessageCount )); then
         replyLastMessage "$err"
     else
         log "$err"
     fi
-    exit 1
+    exit 143
 }
 
 runPythonCode() {
@@ -36,10 +36,19 @@ runPythonModule() {
 
 gitInit() {
     git init &> /dev/null
+    git commit --allow-empty -m "empty commit" &> /dev/null
 }
 
 gitClone() {
     git clone "$@" &> /dev/null
+}
+
+remoteIsExist() {
+    grep -q $1 < <(git remote)
+}
+
+addHeroku() {
+    git remote add heroku $HEROKU_GIT_URL
 }
 
 addUpstream() {
@@ -63,18 +72,18 @@ installReq() {
 }
 
 printLine() {
-    echo ========================================================
+    echo '-<- -<- -<- -<- -<- -<- -<- -<- -<- -<- -<- -<- -<- -<- -<-'
 }
 
 printLogo() {
     printLine
     echo '
- _   _ ____  _____ ____   ____ _____  ____  _   _ _____ 
-| | | / ___|| ____|  _ \ / ___| ____|/ __ \| | | |_   _|
-| | | \___ \|  _| | |_) | |  _|  _| / / _` | | | | | |  
-| |_| |___) | |___|  _ <| |_| | |__| | (_| | |_| | | |  
- \___/|____/|_____|_| \_\\____|_____\ \__,_|\___/  |_|  
-                                     \____/
+     ________            __  __               ______   
+    /_  __/ /_  ___     / / / /_______  _____/ ____/__ 
+     / / / __ \/ _ \   / / / / ___/ _ \/ ___/ / __/ _ \
+    / / / / / /  __/  / /_/ (__  )  __/ /  / /_/ /  __/
+   /_/ /_/ /_/\___/   \____/____/\___/_/   \____/\___/ 
+                                                     
 '
     printLine
 }
